@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  server:
+    build: ./DS2425PracticalAssignment
+    environment:
+      HOME: /home
+      LOCAL_NODE: 10.10.0.6:50001
+    networks:
+      vpcbr:
+        ipv4_address: 10.10.0.6
+    tty: true
+
+  peer1:
+    build: ./DS2425PracticalAssignment
+    environment:
+      HOME: /home
+      LOCAL_NODE: 10.10.1.1
+      NGH_ADDR: 10.10.1.2
+      SERVER_ADDR: 10.10.0.6
+      PRIORITY: 1
+    networks:
+      vpcbr:
+        ipv4_address: 10.10.1.1
+    tty: true
+
+  peer2:
+    build: ./DS2425PracticalAssignment
+    environment:
+      HOME: /home
+      LOCAL_NODE: 10.10.1.2
+      NGH_ADDR: 10.10.1.3
+      SERVER_ADDR: 10.10.0.6
+      PRIORITY: 2
+    networks:
+      vpcbr:
+        ipv4_address: 10.10.1.2
+    tty: true
+  peer3:
+    build: ./DS2425PracticalAssignment
+    environment:
+      HOME: /home
+      LOCAL_NODE: 10.10.1.3
+      NGH_ADDR: 10.10.1.1
+      SERVER_ADDR: 10.10.0.6
+      PRIORITY: 3
+    networks:
+      vpcbr:
+        ipv4_address: 10.10.1.3
+    tty: true
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/16
+          gateway: 10.10.0.1

@@ -1,0 +1,27 @@
+syntax = "proto3";
+option go_package = ".";
+
+service TokenRing {
+    rpc TokenTransit (TokenRequest) returns (TokenResponse){}
+    rpc LeaderElection (LeaderElectionRequest) returns (LeaderElectionResult){}
+}
+
+//Resquest message which containes the Number1 Number2 and the operator
+message TokenRequest {
+    string token = 1;
+}
+
+//Response message which returns the token
+message TokenResponse {
+    string token = 1;
+}
+
+
+message LeaderElectionRequest {
+    string leader = 1;
+}
+
+message LeaderElectionResult {
+    string leader = 1;
+}
+

@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "./";
+
+service Calculator {
+    rpc Calculate (CalculateRequest) returns (CalculateResponse){}
+}
+
+//Resquest message which containes the Number1 Number2 and the operator
+message CalculateRequest {
+    string calc = 1;
+}
+
+//Response message which returns the result
+message CalculateResponse {
+    string result = 1;
+}
