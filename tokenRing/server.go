@@ -1,9 +1,9 @@
 package tokenring
 
 import (
-	tpb "distributed_p2p_network/tokenRing/proto"
 	"encoding/json"
 	"flag"
+	tpb "goTokenRingNetwork/tokenRing/proto"
 	"log"
 	"net"
 
@@ -35,14 +35,14 @@ func Server() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", LocalAddr)
 	if err != nil {
-		log.Fatalf("failed to listen from tokenring server: %v", err)
+		log.Fatalf("failed to listen from tokenring server: %s", err)
 	}
-	log.Printf("Token Ring overlay network server listening at %v", LocalAddr)
+	log.Printf("Token Ring overlay network server listening at %s", LocalAddr)
 	// start grpc server
 	server := grpc.NewServer()
 	// register server
 	tpb.RegisterTokenRingServer(server, &TokenRingServer{})
-	
+
 	if err := server.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

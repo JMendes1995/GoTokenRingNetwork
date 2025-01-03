@@ -1,20 +1,19 @@
 package calculator
 
 import (
-	"distributed_p2p_network/poisson"
 	"errors"
 	"fmt"
+	"goTokenRingNetwork/poisson"
 	"log"
 	"math/rand"
-	"os"
 	"sync"
 	"time"
 )
 
 type Calc struct {
-	Operand1 int `json:"Operand1"`
-	Operand2 int `json:"Operand2"`
-	Operator string  `json:"Operator"`
+	Operand1 int    `json:"Operand1"`
+	Operand2 int    `json:"Operand2"`
+	Operator string `json:"Operator"`
 }
 
 type CalcQueue struct {
@@ -33,12 +32,14 @@ func (q *CalcQueue) Delete(op Calc) {
 	}
 }
 
-var ( 
-	Queue CalcQueue
-	calcServerAddr = os.Getenv("SERVER_ADDR")+":50001"
+const Port = ":50001"
+
+var (
+	Queue         CalcQueue
+	ServerAddress string
 )
 
-func RandomCalcOperaton(rng rand.Rand) Calc{
+func RandomCalcOperaton(rng rand.Rand) Calc {
 	operators := []string{"+", "-", "*", "/"}
 	operator := operators[rng.Intn(len(operators))]
 	return Calc{Operand1: rng.Intn(1000), Operand2: rng.Intn(1000), Operator: operator}
@@ -63,6 +64,7 @@ func CalcOperation(operation Calc) (float64, error) {
 }
 
 func (queue *CalcQueue) EventGenerator(mutex *sync.Mutex) {
+	time.Sleep(time.Second * 10)
 	seed := time.Now().UnixNano()
 	rng := rand.New(rand.NewSource(seed))
 
@@ -90,7 +92,7 @@ func (queue *CalcQueue) EventGenerator(mutex *sync.Mutex) {
 			previousTime = currentTime
 			currentTime += interArrivalTime * 60
 
-			log.Printf("Request %d at %f seconds :::: calculation: %d%s%d\n", i, currentTime, newCalc.Operand1,newCalc.Operator,newCalc.Operand2)
+			log.Printf("Request %d at %f seconds :::: calculation: %d%s%d\n", i, currentTime, newCalc.Operand1, newCalc.Operator, newCalc.Operand2)
 			log.Printf("Sleep %.5f seconds...\n", float64(currentTime-previousTime))
 			delta := time.Duration(currentTime-previousTime) * time.Second
 			time.Sleep(delta)

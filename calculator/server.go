@@ -2,11 +2,11 @@ package calculator
 
 import (
 	"context"
-	cpb "distributed_p2p_network/calculator/proto"
-	"distributed_p2p_network/config"
 	"encoding/json"
 	"flag"
 	"fmt"
+	cpb "goTokenRingNetwork/calculator/proto"
+	"goTokenRingNetwork/config"
 	"log"
 	"net"
 
@@ -28,14 +28,14 @@ func jsonUnmarshal(data string) Calc {
 }
 
 func GetPeerMetadata(ctx context.Context) (string, string, error) {
-  p, _ := peer.FromContext(ctx)
+	p, _ := peer.FromContext(ctx)
 
-  addr := p.Addr
-  ip, port, err := net.SplitHostPort(addr.String())
-  if err != nil {
-      return "", "", err
-  }
-  return ip, port, nil
+	addr := p.Addr
+	ip, port, err := net.SplitHostPort(addr.String())
+	if err != nil {
+		return "", "", err
+	}
+	return ip, port, nil
 
 }
 
@@ -59,7 +59,7 @@ func (s *CalculatorServer) Calculate(ctx context.Context, in *cpb.CalculateReque
 
 func Server() {
 	flag.Parse()
-	lis, err := net.Listen("tcp", calcServerAddr)
+	lis, err := net.Listen("tcp", ServerAddress)
 	if err != nil {
 		log.Fatalf("failed to listen from calc server: %v", err)
 	}

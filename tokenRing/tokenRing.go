@@ -2,14 +2,13 @@ package tokenring
 
 import (
 	"context"
-	"distributed_p2p_network/calculator"
-	"distributed_p2p_network/config"
-	tpb "distributed_p2p_network/tokenRing/proto"
 	"encoding/hex"
 	"fmt"
+	"goTokenRingNetwork/calculator"
+	"goTokenRingNetwork/config"
+	tpb "goTokenRingNetwork/tokenRing/proto"
 	"log"
-	"os"
-	"strconv"
+
 	"sync"
 
 	"golang.org/x/crypto/sha3"
@@ -20,27 +19,32 @@ type TokenRing struct {
 	Token     Token
 }
 type Peer struct {
-	Uid      string `json:"Uid"`
-	Address  string `json:"Address"`
-	Priority int    `json:"Priority"`
-	Leader   bool   `json:"Leader"`
-	TokenHolder bool `json:"TokenHolder"`
+	Uid         string `json:"Uid"`
+	Address     string `json:"Address"`
+	Priority    int    `json:"Priority"`
+	Leader      bool   `json:"Leader"`
+	TokenHolder bool   `json:"TokenHolder"`
 }
 
 type Token struct {
 	Value          string `json:"Value"`
-	PreviousHolder string   `json:"PreviousHolder"`
+	PreviousHolder string `json:"PreviousHolder"`
 }
 
+const Port = ":50002"
+
 var (
-	LocalPeer Peer
+	LocalPeer   Peer
 	SharedToken Token
-	PeerAddr = os.Getenv("NGH_ADDR")+":50002"
-	LocalAddr = os.Getenv("LOCAL_NODE")+":50002" 
-	Priority, _ = strconv.Atoi(os.Getenv("PRIORITY"))
-	Uid = os.Getenv("PRIORITY")
+	Uid         string
+	PeerAddr    string
+	LocalAddr   string
+	ServerAddr  string
+
+	Priority int
 )
-func TokenGenerator(peerString string, mutex *sync.Mutex) Token{
+
+func TokenGenerator(peerString string, mutex *sync.Mutex) Token {
 	// send
 	// Create a SHA3-256 hash
 	hash := sha3.Sum256([]byte(peerString))
@@ -76,7 +80,7 @@ func (s *TokenRingServer) LeaderElection(ctx context.Context, in *tpb.LeaderElec
 
 func (s *TokenRingServer) TokenTransit(ctx context.Context, in *tpb.TokenRequest) (*tpb.TokenResponse, error) {
 
-	getTokenData := TokenJsonUnmarshal(in.GetToken())	
+	getTokenData := TokenJsonUnmarshal(in.GetToken())
 	clientIP, _, errGetPeer := calculator.GetPeerMetadata(ctx)
 	if errGetPeer != nil {
 		log.Fatalf("Error in GetPeer: %v", errGetPeer)
