@@ -1,7 +1,28 @@
 # GoTokenRingNetwork
-
 Project that implements a Mutual Exclusion with the Token Ring Algorithm
 
+
+# Table Of Contents
+
+- [GoTokenRingNetwork](#gotokenringnetwork)
+  - [Implementation Requirements](#implementation-requirements)
+  - [How to build the project](#how-to-build-the-project)
+  - [How to execute the project](#how-to-execute-the-project)
+    - [Execution in physical nodes](#execution-in-physical-nodes)
+      - [Peer input paramenters](#peer-input-paramenters)
+      - [Calculator server input parametes](#calculator-server-input-parametes)
+      - [Docker](#docker)
+        - [Clean up docker environment](#clean-up-docker-environment)
+        - [Clean up docker environment](#clean-up-docker-environment)
+      - [Results intrepertation](#results-intrepertation)
+        - [Tokenring Server startup](#tokenring-server-startup)
+        - [Leadership challenge](#leadership-challenge)
+        - [Leadership Result](#leadership-result)
+        - [Event generation](#event-generation)
+        - [Token transmission](#token-transmission)
+        - [Recieving the token](#recieving-the-token)
+        - [Results from the calculator server](#results-from-the-calculator-server)
+        
 ### Implementation Requirements
 * Create a ring network with 5 peers (call them p1 to p5) such as the one represented in
 the figure above. Each peer must be in a different machine (m1 to m5). Besides these 5
